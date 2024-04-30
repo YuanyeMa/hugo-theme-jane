@@ -1,16 +1,20 @@
 {{ define "content" }}
 <section id="posts" class="posts">
-  {{ $pages := .Pages }}
-  {{ if .IsHome }}
-    {{ $pages = where .Site.RegularPages "Type" "in" site.Params.mainSections }}
-  {{ end }}
-  {{ $paginator := .Paginate $pages }}
-  {{ range $paginator.Pages }}
-    {{ .Render "summary" }}
-  {{ end }}
+  <div class="content-wrapper">
+    <div id="content" class="content">
+      <article class="post">
+      <div class="post-content">
+        <h1>文章分类</h1>
+        <ul>
+          {{ range .Site.Taxonomies.categories }}
+            {{ if ne .Page.Title "年度总结"}}
+            <li><a href="{{ .Page.Permalink }}">{{ .Page.Title }}</a></li>
+            {{ end }}
+          {{ end }}
+        </ul>
+      </div>
+    </article>
+  </div>
+</div>
 </section>
-
-<!-- pagination -->
-{{ partial "pagination.html" . }}
-
 {{ end }}
