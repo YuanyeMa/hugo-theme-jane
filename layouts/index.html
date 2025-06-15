@@ -1,20 +1,20 @@
-{{ define "content" }}
-<section id="posts" class="posts">
-  <div class="content-wrapper">
-    <div id="content" class="content">
-      <article class="post">
-      <div class="post-content">
-        <h1>文章分类</h1>
-        <ul>
-          {{ range .Site.Taxonomies.categories }}
-            {{ if ne .Page.Title "年度总结"}}
-            <li><a href="{{ .Page.Permalink }}">{{ .Page.Title }}</a></li>
-            {{ end }}
-          {{ end }}
-        </ul>
-      </div>
-    </article>
-  </div>
-</div>
+{{ define "content"}}
+{{ $paginator := .Paginate (where .Site.RegularPages.ByDate.Reverse "Title" "ne" "About") (index .Site.Params "archive-paginate" | default 10) }}
+
+<section id="archive" class="archive">
+  {{ range $paginator.Pages }}
+    <div class="archive-post">
+      <time datetime="{{ .Date.Format "2006-01-02" }}" class="archive-post-time">
+        {{ .Date | time.Format (.Site.Params.dateFormatToUse | default "2006-01-02") }}
+      </time>
+      <span class="archive-post-title">
+        <a href="{{ .RelPermalink }}" class="archive-post-link">
+          {{ .Title }}
+        </a>
+      </span>
+    </div>
+  {{ end }}
 </section>
-{{ end }}
+
+{{ partial "pagination.html" . }}
+{{end}}
